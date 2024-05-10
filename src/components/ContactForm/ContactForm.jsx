@@ -2,7 +2,7 @@ import { useId } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import css from './ContactForm.module.css'
-import {addContact} from '../../redux/contactsSlice'
+import {addContact} from '../../redux/contactsOps'
 import { useDispatch } from "react-redux";
 
 export default function ContactForm() {
@@ -15,7 +15,7 @@ export default function ContactForm() {
         number: "",
     };
 
-     // Generating unique IDs for form fields
+
     const nameField = useId();
     const numberField = useId();
 
@@ -25,8 +25,8 @@ export default function ContactForm() {
     });
 
     const handleSubmit = (values, actions) => {
-        dispatch(addContact(values)) // Dispatching addContact action with form values
-    actions.resetForm(); // Resetting form after submission
+        dispatch(addContact(values))
+    actions.resetForm();
   };
 
     return (

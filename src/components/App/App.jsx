@@ -1,28 +1,37 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import ContactForm from '../ContactForm/ContactForm';
-import ContactList from '../ContactList/ContactList';
-import SearchBox from '../SearchBox/SearchBox';
-import { changeFilter } from '../../redux/filtersSlice';
-import { addContact } from '../../redux/contactsSlice';
+import ContactForm from "../ContactForm/ContactForm"
+import SearchBox from "../SearchBox/SearchBox"
+import ContactList from "../ContactList/ContactList"
+import Loader from "../Loader/Loader"
+import css from './App.module.css'
+import { useEffect } from "react";
+import {fetchContacts} from '../../redux/contactsOps'
+import { useDispatch, useSelector } from "react-redux";
+import { selectError, selectLoading } from "../../redux/contactsSlice"
 
-function App() {
-  const contacts = useSelector(changeFilter);
-  const dispatch = useDispatch();
 
-  const handleSubmit = (values, actions) => {
-    dispatch(addContact(values));
-    actions.resetForm();
-  };
+
+export default function App() {
+
+  const loading = useSelector(selectLoading)
+  const error = useSelector(selectError)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchContacts())
+  }, [dispatch]);
+
+
 
   return (
-    <div>
-      <h1>Phonebook</h1>
-      <ContactForm onSubmit={handleSubmit} />
+    <div className={css.container}>
+  <h1 className={css.title}>Phonebook</h1>
+      <ContactForm />
       <SearchBox />
-      <ContactList contacts={contacts} />
-    </div>
-  );
+      <div className={css.LoaderOrError}>{loading && <Loader />}
+        {error && error}
+      </div>
+      <ContactList />
+</div>
+  )
 }
-
-export default App;
